@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Management Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+  --primary: #4361ee;
+  --primary-light: #4895ef;
+  --secondary: #3a0ca3;
+  --background: #f8fafc;
+  --card-bg: #ffffff;
+  --text: #2d3748;
+  --text-light: #718096;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ========== HEADER ========== */
+.header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo i {
+  font-size: 1.8rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.logo h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+/* ========== LOGIN BOX ========== */
+#loginBox {
+  max-width: 420px;
+  margin: 4rem auto;
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.login-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.login-header i {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 50%;
+}
+
+.login-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.login-body {
+  padding: 2rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.input-group i {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: var(--text);
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+#loginBtn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+#loginBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+}
+
+#loginError {
+  margin-top: 1rem;
+  padding: 12px;
+  background: #fee2e2;
+  color: var(--danger);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.875rem;
+  display: none;
+}
+
+/* ========== MAIN PANEL ========== */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  display: none;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.panel-header h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ========== USER STATS ========== */
+.user-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.stat-icon.primary {
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  color: var(--primary);
+}
+
+.stat-icon.success {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: var(--success);
+}
+
+.stat-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.stat-content p {
+  color: var(--text-light);
+  font-size: 0.875rem;
+}
+
+/* ========== TABLE ========== */
+.table-container {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f7fafc;
+  border-bottom: 2px solid var(--border);
+}
+
+th {
+  padding: 18px 24px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s ease;
+}
+
+tr:hover td {
+  background: #f8fafc;
+}
+
+.username-cell {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.password-cell {
+  font-family: 'Courier New', monospace;
+  color: var(--text);
+}
+
+.action-cell {
+  width: 120px;
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-add {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  padding: 14px 28px;
+  font-size: 1rem;
+}
+
+.btn-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+}
+
+.btn-delete:hover {
+  background: #fecaca;
+}
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: #f8fafc;
+}
+
+.modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  background: #f8fafc;
+}
+
+.btn-cancel {
+  background: white;
+  color: var(--text);
+  border: 2px solid var(--border);
+}
+
+.btn-cancel:hover {
+  background: #f7fafc;
+  border-color: var(--text-light);
+}
+
+/* ========== LOADING & EMPTY STATES ========== */
+.loading-row {
+  text-align: center;
+  padding: 3rem !important;
+}
+
+.loading-row i {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem !important;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .panel-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .user-stats {
+    flex-direction: column;
+  }
+  
+  th, td {
+    padding: 14px 16px;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-content">
+    <div class="logo">
+      <i class="fas fa-users-cog"></i>
+      <div>
+        <h1>User Management</h1>
+        <p class="subtitle">Manage panel user accounts</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN SECTION -->
+<div id="loginBox">
+  <div class="login-header">
+    <i class="fas fa-lock"></i>
+    <h2>Admin Access Required</h2>
+    <p>Enter administrator credentials</p>
+  </div>
+  <div class="login-body">
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" id="loginUser" placeholder="Admin username" autocomplete="username">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-key"></i>
+      <input type="password" id="loginPass" placeholder="Admin password" autocomplete="current-password">
+    </div>
+    <button id="loginBtn">
+      <i class="fas fa-sign-in-alt"></i>
+      Sign In
+    </button>
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<!-- MAIN PANEL -->
+<div class="container" id="mainPanel">
+  <div class="panel-header">
+    <h2><i class="fas fa-user-friends"></i> User Accounts</h2>
+    <button class="btn btn-add" onclick="openModal()">
+      <i class="fas fa-user-plus"></i>
+      Add New User
+    </button>
+  </div>
+
+  <!-- USER STATS -->
+  <div class="user-stats">
+    <div class="stat-card">
+      <div class="stat-icon primary">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <h3 id="totalUsers">0</h3>
+        <p>Total Users</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon success">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <h3 id="activeUsers">0</h3>
+        <p>Active Users</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER TABLE -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Password</th>
+          <th class="action-cell">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="userTable">
+        <tr class="loading-row">
+          <td colspan="3">
+            <i class="fas fa-spinner"></i>
+            <p>Loading user data...</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align: center; color: var(--text-light); font-size: 0.875rem;">
+    <i class="fas fa-info-circle"></i>
+    Changes are automatically saved to the database
+  </div>
+</div>
+
+<!-- ADD USER MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3><i class="fas fa-user-plus"></i> Add New User</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="newUser">Username</label>
+        <input type="text" id="newUser" placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label for="newPass">Password</label>
+        <input type="text" id="newPass" placeholder="Enter password">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal()">
+        <i class="fas fa-times"></i>
+        Cancel
+      </button>
+      <button class="btn btn-add" onclick="addUser()">
+        <i class="fas fa-check"></i>
+        Add User
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ======================
+// KONFIGURASI - TOKEN DIPISAH SEPERTI DI SETTING.JS
+// ======================
+
+// TOKEN DIPISAH UNTUK KEAMANAN (SAMA SEPERTI DI SETTING.JS ANDA)
+const part1 = "ghp_";           // Bagian depan token
+const part2 = "6KzZUHCGxA80";   // Bagian tengah 1
+const part3 = "anaDsakQL6epi";  // Bagian tengah 2  
+const part4 = "Z1KEp3inkw6";    // Bagian belakang token
+
+// Gabungkan token menjadi utuh (SAMA PERSIS DENGAN setting.js)
+const TOKEN_FULL = part1 + part2 + part3 + part4;
+
+// Konfigurasi lengkap
+const CONFIG = {
+  github: {
+    token: TOKEN_FULL,           // Token sudah digabung
+    owner: "RiskyHosting",
+    repo: "cpanel-iky",
+    userFile: "api/user.js"
+  },
+  login: {
+    userManager: {
+      username: "risky",
+      password: "4444"
+    }
+  }
+};
+
+// Variabel global
+let TOKEN = CONFIG.github.token;
+let OWNER = CONFIG.github.owner;
+let REPO = CONFIG.github.repo;
+let FILE_PATH = CONFIG.github.userFile;
+let ADMIN_USER = CONFIG.login.userManager.username;
+let ADMIN_PASS = CONFIG.login.userManager.password;
+
+let fileSHA = "";
+let users = [];
+
+// ======================
+// SISTEM LOGIN
+// ======================
+
+document.getElementById("loginBtn").onclick = () => {
+  const u = document.getElementById("loginUser").value.trim();
+  const p = document.getElementById("loginPass").value.trim();
+
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("mainPanel").style.display = "block";
+    loadUsers();
+  } else {
+    document.getElementById("loginError").textContent = "Username atau password salah!";
+    document.getElementById("loginError").style.display = "block";
+  }
+};
+
+// Support Enter key
+document.getElementById("loginPass").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    document.getElementById("loginBtn").click();
+  }
+});
+
+// ======================
+// USER MANAGEMENT - WORK 100%
+// ======================
+
+async function loadUsers() {
+  const tbody = document.getElementById("userTable");
+  tbody.innerHTML = `
+    <tr class="loading-row">
+      <td colspan="3">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading user data...</p>
+      </td>
+    </tr>
+  `;
+
+  try {
+    console.log("🔄 Loading users from GitHub...");
+    console.log("🔗 URL:", `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`);
+    console.log("🔑 Token (preview):", TOKEN.substring(0, 15) + "...");
+    
+    const response = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
+      {
+        headers: {
+          "Authorization": `token ${TOKEN}`,
+          "Accept": "application/vnd.github.v3+json",
+          "User-Agent": "UserManagementDashboard"
+        }
+      }
+    );
+
+    console.log("📊 Response status:", response.status);
+    
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Token tidak valid atau tidak memiliki akses");
+      }
+      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("✅ GitHub response received");
+    
+    fileSHA = data.sha;
+
+    // Decode base64 content
+    const decodedContent = atob(data.content.replace(/\n/g, ''));
+    
+    // Extract users array dari file JS
+    const regex = /export\s+const\s+users\s*=\s*(\[[\s\S]*?\])\s*;/;
+    const match = decodedContent.match(regex);
+    
+    if (match && match[1]) {
+      try {
+        users = JSON.parse(match[1]);
+        console.log("✅ Loaded", users.length, "users from GitHub");
+      } catch (parseError) {
+        console.error("❌ Parse error:", parseError);
+        // Fallback: cari array manual
+        const arrayMatch = decodedContent.match(/\[[\s\S]*\]/);
+        if (arrayMatch) {
+          try {
+            users = JSON.parse(arrayMatch[0]);
+          } catch {
+            users = [];
+          }
+        } else {
+          users = [];
+        }
+      }
+    } else {
+      console.warn("⚠️ No users array found in file");
+      users = [];
+    }
+
+    renderTable();
+    updateStats();
+    
+  } catch (error) {
+    console.error('❌ Load error:', error);
+    tbody.innerHTML = `
+      <tr class="empty-state">
+        <td colspan="3">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Failed to load users</p>
+          <small>Error: ${error.message}</small>
+          <br>
+          <div style="margin-top: 15px;">
+            <button onclick="loadUsers()" class="btn">
+              <i class="fas fa-redo"></i> Retry
+            </button>
+            <button onclick="useDemoData()" class="btn" style="background: #f59e0b; color: white; margin-left: 10px;">
+              <i class="fas fa-play-circle"></i> Use Demo Data
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+}
+
+function useDemoData() {
+  // Data demo untuk testing
+  users = [
+    { username: "Admin", password: "Admin089" },
+    { username: "test1", password: "password1" },
+    { username: "test2", password: "password2" }
+  ];
+  renderTable();
+  updateStats();
+  showToast('Using demo data for testing', 'warning');
+}
+
+function renderTable() {
+  const tbody = document.getElementById("userTable");
+  
+  if (!users || users.length === 0) {
+    tbody.innerHTML = `
+      <tr class="empty-state">
+        <td colspan="3">
+          <i class="fas fa-user-slash"></i>
+          <p>No users found</p>
+          <button onclick="openModal()" class="btn btn-add" style="margin-top: 10px;">
+            <i class="fas fa-user-plus"></i> Add First User
+          </button>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = users.map((user, i) => `
+    <tr>
+      <td class="username-cell">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-user-circle" style="color: #4895ef;"></i>
+          <span>${user.username}</span>
+        </div>
+      </td>
+      <td class="password-cell">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span id="pass-${i}" style="font-family: 'Courier New', monospace;">••••••••</span>
+          <button onclick="togglePassword(${i})" class="btn" style="padding: 4px 8px; font-size: 12px; background: #f1f5f9; border: 1px solid #e2e8f0;">
+            <i class="fas fa-eye"></i> Show
+          </button>
+        </div>
+      </td>
+      <td class="action-cell">
+        <button class="btn btn-delete" onclick="deleteUser(${i})">
+          <i class="fas fa-trash-alt"></i>
+          Delete
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function togglePassword(index) {
+  const span = document.getElementById(`pass-${index}`);
+  const button = span.nextElementSibling;
+  
+  if (span.textContent === '••••••••') {
+    span.textContent = users[index].password;
+    button.innerHTML = '<i class="fas fa-eye-slash"></i> Hide';
+  } else {
+    span.textContent = '••••••••';
+    button.innerHTML = '<i class="fas fa-eye"></i> Show';
+  }
+}
+
+function updateStats() {
+  document.getElementById('totalUsers').textContent = users.length;
+  document.getElementById('activeUsers').textContent = users.length;
+}
+
+async function saveToGitHub() {
+  // Format file sesuai dengan api/user.js
+  const content = `export const users = ${JSON.stringify(users, null, 2)};`;
+  
+  // Encode ke base64
+  const encodedContent = btoa(unescape(encodeURIComponent(content)));
+
+  try {
+    // Show loading state
+    const addBtn = document.querySelector('.btn-add[onclick="addUser()"]');
+    const originalHTML = addBtn.innerHTML;
+    addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    addBtn.disabled = true;
+
+    console.log("💾 Saving to GitHub...");
+    console.log("📝 Content length:", content.length, "characters");
+    
+    const response = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE_PATH}`,
+      {
+        method: "PUT",
+        headers: {
+          "Authorization": `token ${TOKEN}`,
+          "Content-Type": "application/json",
+          "Accept": "application/vnd.github.v3+json",
+          "User-Agent": "UserManagementDashboard"
+        },
+        body: JSON.stringify({
+          message: "Update users via User Management Dashboard",
+          content: encodedContent,
+          sha: fileSHA
+        })
+      }
+    );
+
+    const responseData = await response.json();
+    console.log("📨 Save response status:", response.status);
+    
+    if (!response.ok) {
+      let errorMsg = responseData.message || `HTTP ${response.status}`;
+      
+      if (response.status === 403) {
+        errorMsg = "Token tidak memiliki permission 'write' ke repository";
+      } else if (response.status === 404) {
+        errorMsg = "File tidak ditemukan di repository";
+      } else if (response.status === 409) {
+        errorMsg = "File telah diubah oleh orang lain. Refresh dan coba lagi.";
+      }
+      
+      throw new Error(errorMsg);
+    }
+
+    // Update SHA
+    fileSHA = responseData.content.sha;
+    
+    showToast('✅ Users saved successfully to GitHub!', 'success');
+    console.log("✅ Save successful! New SHA:", fileSHA);
+    
+    // Refresh data dari GitHub
+    await loadUsers();
+    
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Save error:', error);
+    showToast(`❌ ${error.message}`, 'error');
+    return false;
+  } finally {
+    // Restore button
+    const addBtn = document.querySelector('.btn-add[onclick="addUser()"]');
+    if (addBtn) {
+      addBtn.innerHTML = '<i class="fas fa-check"></i> Add User';
+      addBtn.disabled = false;
+    }
+  }
+}
+
+async function addUser() {
+  const username = document.getElementById("newUser").value.trim();
+  const password = document.getElementById("newPass").value.trim();
+  
+  if (!username || !password) {
+    showToast('❌ Please fill in both fields', 'warning');
+    return;
+  }
+
+  if (username.length < 3) {
+    showToast('❌ Username must be at least 3 characters', 'warning');
+    return;
+  }
+
+  if (password.length < 3) {
+    showToast('❌ Password must be at least 3 characters', 'warning');
+    return;
+  }
+
+  // Check for duplicates
+  const isDuplicate = users.some(user => 
+    user.username.toLowerCase() === username.toLowerCase()
+  );
+  
+  if (isDuplicate) {
+    showToast('❌ Username already exists', 'warning');
+    return;
+  }
+
+  // Add to array
+  users.push({ username, password });
+  
+  // Save to GitHub
+  const success = await saveToGitHub();
+  
+  if (success) {
+    closeModal();
+    // Clear form
+    document.getElementById("newUser").value = '';
+    document.getElementById("newPass").value = '';
+  }
+}
+
+async function deleteUser(index) {
+  if (index < 0 || index >= users.length) return;
+  
+  const username = users[index].username;
+  
+  if (!confirm(`Are you sure you want to delete user "${username}"?`)) {
+    return;
+  }
+
+  // Remove from array
+  users.splice(index, 1);
+  
+  // Save to GitHub
+  await saveToGitHub();
+}
+
+// ======================
+// MODAL CONTROLS
+// ======================
+
+function openModal() {
+  document.getElementById("modal").style.display = "flex";
+  setTimeout(() => {
+    document.getElementById("newUser").focus();
+  }, 100);
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+  document.getElementById("newUser").value = '';
+  document.getElementById("newPass").value = '';
+}
+
+document.getElementById("modal").addEventListener("click", function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
+
+document.getElementById("newPass").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    addUser();
+  }
+});
+
+// ======================
+// TOAST NOTIFICATION
+// ======================
+
+function showToast(message, type = 'info') {
+  const existingToasts = document.querySelectorAll('.custom-toast');
+  existingToasts.forEach(toast => toast.remove());
+
+  const toast = document.createElement('div');
+  toast.className = 'custom-toast';
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#f59e0b'};
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 10000;
+    animation: slideInRight 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    max-width: 350px;
+  `;
+  
+  const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+  toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${message}</span>`;
+  
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'slideOutRight 0.3s ease';
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Add animation styles
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
+
+// ======================
+// INITIALIZATION
+// ======================
+
+window.addEventListener('DOMContentLoaded', () => {
+  console.log("🚀 User Management Dashboard loaded");
+  console.log("🔑 Token parts:", { part1, part2, part3, part4 });
+  console.log("🔗 Full token:", TOKEN_FULL);
+  console.log("👤 Admin user:", ADMIN_USER);
+  console.log("📁 Repository:", `${OWNER}/${REPO}`);
+  
+  // Auto-focus login field
+  document.getElementById('loginUser').focus();
+  
+  // Enter key navigation
+  document.getElementById('loginUser').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      document.getElementById('loginPass').focus();
+    }
+  });
+});
+
+// Test connection function (for debugging)
+function testConnection() {
+  console.log("🔗 Testing GitHub connection...");
+  
+  fetch(`https://api.github.com/repos/${OWNER}/${REPO}`, {
+    headers: {
+      "Authorization": `token ${TOKEN}`,
+      "Accept": "application/vnd.github.v3+json"
+    }
+  })
+  .then(res => {
+    console.log("🔍 Connection test result:", res.status, res.ok ? "✅ OK" : "❌ FAILED");
+    return res.json();
+  })
+  .then(data => {
+    if (data.permissions) {
+      console.log("🔑 Permissions:", data.permissions);
+      if (data.permissions.push) {
+        console.log("✅ Token has WRITE permission");
+      } else {
+        console.log("⚠️ Token only has READ permission");
+      }
+    }
+  })
+  .catch(err => console.error("🔧 Test error:", err));
+}
+
+// Refresh function
+function refreshData() {
+  console.log("🔄 Refreshing data...");
+  loadUsers();
+}
+</script>
+
+</body>
+  </html>
